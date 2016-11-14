@@ -28,6 +28,11 @@
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.7</version>
+        </dependency>
         <!-- java web 相关依赖 servlet,jsp,jstl -->
         <!-- servlet -->
         <dependency>

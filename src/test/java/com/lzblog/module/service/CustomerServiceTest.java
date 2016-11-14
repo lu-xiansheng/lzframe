@@ -21,7 +21,8 @@ public class CustomerServiceTest {
     public void testGetCustomer() throws Exception {
         customerService = new CustomerService();
         Customer customer = customerService.getCustomer("123");
-        logger.info(customer.getName());
+        /*System.out.print(customer.getName());*/
+        logger.error(customer.getName());
     }
 
 }
