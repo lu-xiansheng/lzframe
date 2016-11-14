@@ -2,13 +2,16 @@ package com.lzblog.module.help;
 
 import com.lzblog.module.entity.Customer;
 import com.lzblog.module.util.PropsUtil;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -19,39 +22,51 @@ public class DataBaseHelper {
 
     private static final Logger logger = Logger.getLogger(Customer.class);
 
-    private static final String DRIVER;
+    /*private static final String DRIVER;
     private static final String URL;
     private static final String USERNAME;
-    private static final String PASSWORD;
+    private static final String PASSWORD;*/
+    //线程池
+    private static final ThreadLocal<Connection> CONNECTION_THREAD_LOCAL;
 
-    private static final ThreadLocal<Connection> CONNECTION_THREAD_LOCAL =
-            new ThreadLocal<Connection>();
+    //Apache Commons Dbutils
+    private static final QueryRunner QUERY_RUNNER;
 
-    private static final QueryRunner QUERY_RUNNER = new QueryRunner();
+    //数据库连接池
+    private static final BasicDataSource DATA_SOURCE;
 
     static {
-        Properties conf = PropsUtil.loadPrope("jdbc.properties");
-        DRIVER = conf.getProperty("jdbc.driver");
-        URL = conf.getProperty("jdbc.url");
-        USERNAME = conf.getProperty("jdbc.username");
-        PASSWORD = conf.getProperty("jdbc.password");
+        CONNECTION_THREAD_LOCAL = new ThreadLocal<Connection>();
 
-        try {
+        QUERY_RUNNER = new QueryRunner();
+
+        Properties conf = PropsUtil.loadPrope("jdbc.properties");
+        String driver = conf.getProperty("jdbc.driver");
+        String url = conf.getProperty("jdbc.url");
+        String username = conf.getProperty("jdbc.username");
+        String password = conf.getProperty("jdbc.password");
+
+        DATA_SOURCE = new BasicDataSource();
+        DATA_SOURCE.setDriverClassName(driver);
+        DATA_SOURCE.setUrl(url);
+        DATA_SOURCE.setUsername(username);
+        DATA_SOURCE.setPassword(password);
+        /*try {
             Class.forName(DRIVER);
         } catch (ClassNotFoundException e) {
             logger.error("can't load jdbc driver",e);
-        }
+        }*/
     }
 
     /**
      * 获取数据库连接
-     * @return
+     * @return connect
      */
     public static Connection getConnection() {
         Connection connect = CONNECTION_THREAD_LOCAL.get();
         if(connect == null) {
             try {
-                connect = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+                connect = DATA_SOURCE.getConnection();
             } catch (SQLException e) {
                 logger.error("execute sql failure", e);
                 throw new RuntimeException(e);
@@ -97,5 +112,20 @@ public class DataBaseHelper {
             closeConnection();
         }
         return entity;
+    }
+
+    /**
+     * 增强型查询实体
+     */
+    public static List<Map<String,Object>> executeQuery(String sql, Object... params) {
+        List<Map<String,Object>> result;
+        try {
+            Connection connection = getConnection();
+            result = QUERY_RUNNER.query(connection,sql,new MapListHandler(),params);
+        } catch (SQLException e) {
+            logger.error("query entity failure",e);
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 }

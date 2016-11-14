@@ -22,7 +22,7 @@ public class CustomerServiceTest {
         customerService = new CustomerService();
         Customer customer = customerService.getCustomer("123");
         /*System.out.print(customer.getName());*/
-        logger.error(customer.getName());
+        logger.error(customer.getEmail());
     }
 
 }
