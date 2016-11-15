@@ -40,7 +40,7 @@ public class DataBaseHelper {
 
         QUERY_RUNNER = new QueryRunner();
 
-        Properties conf = PropsUtil.loadPrope("jdbc.properties");
+        Properties conf = PropsUtil.loadPrope("lzframe.properties");
         String driver = conf.getProperty("jdbc.driver");
         String url = conf.getProperty("jdbc.url");
         String username = conf.getProperty("jdbc.username");
