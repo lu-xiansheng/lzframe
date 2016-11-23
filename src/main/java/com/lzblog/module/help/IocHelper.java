@@ -12,7 +12,7 @@ import java.util.Map;
  * 依赖注入助手类
  * Created by lz on 2016/11/15.
  */
-public class IocHelper {
+public final class IocHelper {
 
     static {
         //获取所有Bean类与实例之间的映射关系

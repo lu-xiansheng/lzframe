@@ -55,6 +55,7 @@ public class ClassUtil {
         try {
             Enumeration<URL> urls = getClassLoader().getResources(
                     packageName.replace(".","/"));
+            logger.info(packageName.replace(".","/"));
             while(urls.hasMoreElements()) {
                 URL url = urls.nextElement();
                 if(url != null) {

@@ -1,5 +1,7 @@
 package com.lzblog.module.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * 字符串工具类
  * Created by lz on 2016/11/12.
@@ -14,7 +16,7 @@ public final class StringUtil {
         if(str != null) {
            str = str.trim();
         }
-        return StringUtil.isEmpty(str);
+        return StringUtils.isEmpty(str);
     }
 
     /**
@@ -24,5 +26,12 @@ public final class StringUtil {
      */
     public static boolean isNotEmpty(String str) {
         return !isEmpty(str);
+    }
+
+    public static String[] splitString(String str, String s) {
+        if (isNotEmpty(str)) {
+            return str.split("&");
+        }
+        return null;
     }
 }

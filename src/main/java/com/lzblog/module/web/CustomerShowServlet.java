@@ -4,7 +4,6 @@ import com.lzblog.module.entity.Customer;
 import com.lzblog.module.service.CustomerService;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +13,7 @@ import java.io.IOException;
  * 展示客户
  * Created by lz on 2016/11/11.
  */
-@WebServlet("/show")
+/*@WebServlet("/show")*/
 public class CustomerShowServlet extends HttpServlet {
 
     private CustomerService customerService;
